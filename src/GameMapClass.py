@@ -1,9 +1,9 @@
-class Map:
+class GameMap:
     """
-    Map class. Make calculations to interact with map.
+    GameMap class. Make calculations to interact with map.
     """
 
-    def __init__(self, string_map: str = 'Default Map'):
+    def __init__(self, string_map: str = 'Default GameMap'):
         self._string_map = string_map
 
     def set_map(self, string_map: str):

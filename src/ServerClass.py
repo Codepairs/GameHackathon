@@ -1,6 +1,6 @@
 from flask import Flask, request
 from LoggerClass import Logger
-from MapClass import Map
+from GameMapClass import GameMap
 
 
 class Server:
@@ -8,7 +8,7 @@ class Server:
     Server class. Used to send and receive requests from remote GAME server.
     """
     def __init__(self):
-        self.game_map = Map()
+        self.game_map = GameMap()
         self._logger = Logger('Server')
         self._flask_app = Flask(__name__)
         # Need to add requests to our server here
