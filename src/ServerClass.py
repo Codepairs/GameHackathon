@@ -1,14 +1,18 @@
 from flask import Flask, request
 from LoggerClass import Logger
-from GameMapClass import GameMap
+from MapSolverClass import MapSolver
+import requests
 
 
 class Server:
     """
     Server class. Used to send and receive requests from remote GAME server.
     """
+
     def __init__(self):
-        self.game_map = GameMap()
+        self._solver = MapSolver("Current Map")
+        self._team_information = ''
+        self._dats_black_url = ''
         self._logger = Logger('Server')
         self._flask_app = Flask(__name__)
         # Need to add requests to our server here
@@ -34,21 +38,27 @@ class Server:
         Scan map
         :return:
         """
-        self._logger.send_message("Сканируем карту!", "info")
-        # do scan
-        self._logger.send_message("Карта сканирована успешно. Ответ: {такой то такой то}", "info")
+        try:
+            self._logger.send_message("Сканируем карту!", "info")
+            self._solver.scan_map()
+            scan_response = requests.get(url=self._dats_black_url, data=self._team_information)
+            self._logger.send_message(f"Карта сканирована успешно. Ответ: {scan_response}", "info")
+        except:
+            self._logger.send_message("Ошибка при сканировании карты!", "error")
 
-    def shoot_request(self):
+    def shoot_request(self, position):
         """
         Shoot at smb
         :return:
         """
-        self._logger.send_message("Выполняем Атаку!", "info")
-        # do shot
-        self._logger.send_message("Атака прошла успешно. Ответ: {такой то такой то}", "info")
+        try:
+            self._logger.send_message("Выполняем Атаку!", "info")
+            shoot_data = self._solver.shoot_at(position)
+            shoot_response = requests.post(url=self._dats_black_url, data=shoot_data)
+            self._logger.send_message(f"Атака прошла успешно. Ответ: {shoot_response}", "info")
+        except:
+            self._logger.send_message("Ошибка при выполнении атаки!", "error")
 
     def run(self):
         self._logger.send_message("Сервер запущен!", "info")
         self._flask_app.run(host='127.0.0.1', port=5000)
-
-
