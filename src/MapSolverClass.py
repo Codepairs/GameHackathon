@@ -1,5 +1,5 @@
 from GameMapClass import GameMap
-
+from AlgoClass import Algo
 
 class MapSolver:
     """
