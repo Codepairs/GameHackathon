@@ -5,6 +5,7 @@ import random
 class Algo:
     @staticmethod
     def check_direction(area, coordinates, direction, speed):
+        pass
 
     @staticmethod
     def make_move(area, coordinates, direction, speed): #speed is 1 now
