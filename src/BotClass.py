@@ -16,7 +16,10 @@ class Bot:
         self.direction = direction
         self.algorithm = Algo
         self.coordinates = coords
+        self.matrix_area = []
 
+    def make_area_from_radius(self, whole_map, radius, coords):
+        self.matrix_area = whole_map[coords[1]-radius:coords[1] + radius, coords[0]-radius:coords[0] + radius]
 
     def set_speed(self, speed):
         self.speed = speed
