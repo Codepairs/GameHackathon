@@ -54,11 +54,16 @@ class Bot:
 
 
     def make_move(self):
-        coords = self.algorithm.make_move(self.matrix_area, self.coordinates, self.direction, self.speed)
-        if coords==None:
-            self.speed-=2
+        coords, new_direction = self.algorithm.make_move(self.matrix_area, self.coordinates, self.direction, self.speed)
+
+        if new_direction!=self.direction:
+            self.direction = new_direction
+            self.speed = self.speed//2
+        else:
+            self.speed = self.speed%10 + self.speed//10 * 10 #check if speed is close to max
+
+        self.coordinates = coords
         return coords
-        ''' to be continued'''
 
     def attack_opponents(self, opponent_coords, dir, speed):
         attack_coords = opponent_coords
