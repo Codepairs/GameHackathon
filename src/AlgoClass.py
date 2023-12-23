@@ -5,6 +5,7 @@ import random
 class Algo:
     @staticmethod
     def check_direction(area, coordinates, direction, speed):
+<<<<<<< HEAD
         if direction == 0:
             # 'north':
             if (coordinates[0] - speed > 0 and area[coordinates[0] - speed][coordinates[1]] == 0):
@@ -32,6 +33,9 @@ class Algo:
                 coordinates[1] -= 1
             else:
                 direction = 0
+=======
+        pass
+>>>>>>> s44w
 
     @staticmethod
     def make_move(area, coordinates, direction, speed): #speed is 1 now
