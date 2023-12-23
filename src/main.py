@@ -22,16 +22,7 @@ if __name__ == '__main__':
     server.deathmatch_registration_request()
     islands_map = server.map_request()
     game_map = GameMap(islands_map)
-    clock = pg.time.Clock()
-    running = True
-    screen.fill((0, 0, 0))
-    while running:
-        for event in pg.event.get():
-            if event.type == pg.QUIT:
-                running = False
-                pg.quit()
-        game_map.render_islands()
-        pg.display.flip()
+    game_map.run()
 
 
 
