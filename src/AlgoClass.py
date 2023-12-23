@@ -16,36 +16,6 @@ class Algo:
                                      'west': [Direction.north, Direction.south]}
 
     @staticmethod
-<<<<<<< HEAD
-    def check_direction(area, coordinates, direction, speed):
-        if direction == 0:
-            # 'north':
-            if (coordinates[0] - speed > 0 and area[coordinates[0] - speed][coordinates[1]] == 0):
-                coordinates[0] -= speed
-
-            else:
-                direction = 1
-
-        if direction == 1:  # 'east':
-            if (area[coordinates[0]][coordinates[1] + speed] == 0):
-                coordinates[1] += 1
-
-            else:
-                direction = 2
-
-        if direction == 2:  # "'south':
-            if (area[coordinates[0] + speed][coordinates[1]] == 0):
-                coordinates[0] += 1
-
-            else:
-                direction = 3
-
-        if direction == 3:  # 'west':
-            if (area[coordinates[0]][coordinates[1] - 1] == 0):
-                coordinates[1] -= 1
-            else:
-                direction = 0
-
     def check_enemies_by_direction(whole_map, ship_coordinates, ship_direction, ship_speed):
         pass
 
@@ -94,73 +64,26 @@ class Algo:
                 elif (Algo.check_east(whole_map, ship_coordinates, ship_speed)):
                     ship_direction = 1
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-            if direction==1: #'east':
-                if (area[coordinates[0]][coordinates[1]+speed] == 0):
-                    coordinates[1] += speed
-=======
-                elif (Algo.check_east(whole_map, ship_coordinates, ship_speed)):
-=======
                 elif (Algo.check_west(whole_map, ship_coordinates, ship_speed)):
->>>>>>> s44w
                     ship_direction = 3
->>>>>>> s44w
 
             case Direction.east.value:  # 'east':
                 if (Algo.check_east(whole_map, ship_coordinates, ship_speed * coefficient)):
                     ship_coordinates[1] += ship_speed
 
-<<<<<<< HEAD
-            if direction==2: #"'south':
-                if (area[coordinates[0]+speed][coordinates[1]] == 0):
-                    coordinates[0] += speed
-=======
                 elif (Algo.check_south(whole_map, ship_coordinates, ship_speed )):
                     ship_direction = 2
->>>>>>> s44w
 
                 elif (Algo.check_north(whole_map, ship_coordinates, ship_speed )):
                     ship_direction = 0
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-            if direction==3: #'west':
-                if (area[coordinates[0]][coordinates[1] - speed] == 0):
-                    coordinates[1] -= speed
-                else:
-                    direction = 0
-                    changing_direction_count+=1
-=======
-            elif ship_direction == Direction.south.value:  # "'south':
-=======
             case Direction.south.value:  # "'south':
->>>>>>> s44w
                 if (Algo.check_south(whole_map, ship_coordinates, ship_speed * coefficient)):
                     ship_coordinates[0] += ship_speed
->>>>>>> s44w
 
                 elif (Algo.check_east(whole_map, ship_coordinates, ship_speed)):
                     ship_direction = 1
 
-<<<<<<< HEAD
-        return [coordinates, direction]
-
-    @staticmethod
-    def setup_changes(id, speed, rotate, x, y):
-        changes = {
-            'id': id,
-            'changeSpeed': speed,
-            'rotate': rotate,
-            'cannonShoot': {
-                'x': x,
-                'y': y
-            }
-        }
-        return changes
-
-
-=======
                 elif (Algo.check_west(whole_map, ship_coordinates, ship_speed)):
                     ship_direction = 3
 
@@ -178,4 +101,3 @@ class Algo:
 
 if __name__ == '__main__':
     print(Direction.north)
->>>>>>> s44w
