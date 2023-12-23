@@ -4,6 +4,9 @@ import random
 
 class Algo:
     @staticmethod
+    def check_direction(area, coordinates, direction, speed):
+
+    @staticmethod
     def make_move(area, coordinates, direction, speed): #speed is 1 now
         coords = coordinates[::]
         changing_direction_count = 0
@@ -11,15 +14,15 @@ class Algo:
 
             if direction==0:
              #'north':
-                if (area[coordinates[0]-1][coordinates[1]]==0):
-                    coordinates[0]-=1
+                if (coordinates[0]-speed>0 and  area[coordinates[0]-speed][coordinates[1]]==0):
+                    coordinates[0]-=speed
 
                 else:
                     direction = 1
                     changing_direction_count+=1
 
             if direction==1: #'east':
-                if (area[coordinates[0]][coordinates[1]+1] == 0):
+                if (area[coordinates[0]][coordinates[1]+speed] == 0):
                     coordinates[1] += 1
 
                 else:
@@ -27,7 +30,7 @@ class Algo:
                     changing_direction_count+=1
 
             if direction==2: #"'south':
-                if (area[coordinates[0]+1][coordinates[1]] == 0):
+                if (area[coordinates[0]+speed][coordinates[1]] == 0):
                     coordinates[0] += 1
 
                 else:
