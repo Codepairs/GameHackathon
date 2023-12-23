@@ -1,6 +1,6 @@
 import enum
 import random
-
+import math
 from AlgoClass import Algo
 
 class Direction(enum.Enum):
@@ -10,8 +10,9 @@ class Direction(enum.Enum):
     west = 3
 
 class Bot:
-    def __init__(self, scan_radius, speed, direction, coords):
+    def __init__(self, scan_radius, attack_radius, speed, direction, coords):
         self.scan_radius = scan_radius
+        self.attack_radius = attack_radius
         self.speed = speed
         self.direction = direction
         self.algorithm = Algo
@@ -38,10 +39,10 @@ class Bot:
         return self.direction
 
     def set_area(self, area):
-        self.scan_radius = area
+        self.matrix_area = area
 
     def get_area(self):
-        return self.scan_radius
+        return self.matrix_area
 
     def set_coordinates(self, coords):
         self.coordinates = coords
@@ -54,14 +55,24 @@ class Bot:
             pass
 
     def make_move(self):
-        coords = self.algorithm.make_move(self.scan_radius, self.coordinates, self.direction, self.speed)
+        coords = self.algorithm.make_move(self.matrix_area, self.coordinates, self.direction, self.speed)
         if coords==None:
             self.speed-=2
         return coords
         ''' to be continued'''
 
-    def attack_opponents(self, x, y, dir, speed):
-        attack_coords = x,y
+    def attack_opponents(self, opponent_coords, dir, speed):
+        attack_coords = opponent_coords
+        distance = math.sqrt(math.pow(opponent_coords[0]-self.coordinates[0],2)
+                                          + math.pow(opponent_coords[1]-self.coordinates[0],2))
+        if self.attack_radius < distance:
+            cos = distance/(opponent_coords[1]-self.coordinates[1])
+            sin = distance/(opponent_coords[0]-self.coordinates[0])
+
+            attack_coords[0] = (int) (self.attack_radius*sin) # y
+            attack_coords[1] = (int) (self.attack_radius*cos) # x
+        return attack_coords
+
 
 
 
