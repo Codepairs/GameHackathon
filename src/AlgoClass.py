@@ -85,12 +85,9 @@ class Algo:
     # достаточно проверять зону через скорость*2
     @staticmethod
     def make_move(whole_map, ship_coordinates, ship_direction, ship_speed):
-        coords = ship_coordinates[::]
         coefficient = 2
-        changing_direction_count = 0
-        while coords == ship_coordinates:
-
-            if (ship_direction == Direction.north.value):
+        match(ship_direction):
+            case Direction.north.value:
                 if (Algo.check_north(whole_map, ship_coordinates, ship_speed*coefficient)):
                     ship_coordinates[0] -= ship_speed
 
@@ -98,15 +95,19 @@ class Algo:
                     ship_direction = 1
 
 <<<<<<< HEAD
+<<<<<<< HEAD
             if direction==1: #'east':
                 if (area[coordinates[0]][coordinates[1]+speed] == 0):
                     coordinates[1] += speed
 =======
                 elif (Algo.check_east(whole_map, ship_coordinates, ship_speed)):
+=======
+                elif (Algo.check_west(whole_map, ship_coordinates, ship_speed)):
+>>>>>>> s44w
                     ship_direction = 3
 >>>>>>> s44w
 
-            elif ship_direction == Direction.east.value:  # 'east':
+            case Direction.east.value:  # 'east':
                 if (Algo.check_east(whole_map, ship_coordinates, ship_speed * coefficient)):
                     ship_coordinates[1] += ship_speed
 
@@ -123,6 +124,7 @@ class Algo:
                     ship_direction = 0
 
 <<<<<<< HEAD
+<<<<<<< HEAD
             if direction==3: #'west':
                 if (area[coordinates[0]][coordinates[1] - speed] == 0):
                     coordinates[1] -= speed
@@ -131,6 +133,9 @@ class Algo:
                     changing_direction_count+=1
 =======
             elif ship_direction == Direction.south.value:  # "'south':
+=======
+            case Direction.south.value:  # "'south':
+>>>>>>> s44w
                 if (Algo.check_south(whole_map, ship_coordinates, ship_speed * coefficient)):
                     ship_coordinates[0] += ship_speed
 >>>>>>> s44w
@@ -159,7 +164,7 @@ class Algo:
                 elif (Algo.check_west(whole_map, ship_coordinates, ship_speed)):
                     ship_direction = 3
 
-            elif ship_direction == Direction.west.value:  # 'west':
+            case Direction.west.value:  # 'west':
                 if (Algo.check_west(whole_map, ship_coordinates, ship_speed * coefficient)):
                     ship_coordinates[1] -= ship_speed
 
