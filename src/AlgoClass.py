@@ -46,9 +46,7 @@ class Algo:
             else:
                 direction = 0
 
-=======
     def check_enemies_by_direction(whole_map, ship_coordinates, ship_direction, ship_speed):
->>>>>>> s44w
         pass
 
 
