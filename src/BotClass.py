@@ -61,7 +61,6 @@ class Bot:
         return coords
         ''' to be continued'''
 
-
     def choose_closest(self, enemy_ships):
         closest_enemy_ship = None
         minimal_distance = 100000000000
