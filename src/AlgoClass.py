@@ -3,88 +3,75 @@ import random
 
 
 class Algo:
+    @staticmethod
+    def check_direction(area, coordinates, direction, speed):
+        if direction == 0:
+            # 'north':
+            if (coordinates[0] - speed > 0 and area[coordinates[0] - speed][coordinates[1]] == 0):
+                coordinates[0] -= speed
 
-    def __init__(self, area=None, traj=0):
-        if area is None:
-            area = []
-        self.area = area   #matrix [[0, 0, 1, 1, 0], [0, 0, 0, 1, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 1], [1, 1, 1, 0, 1] ]
-        self.trajectory = traj #enum.Enum('traj', ['north', 'east', 'south', 'west'])
-        self.coordinates = [len(area[0])//2, len(area[0])//2]
+            else:
+                direction = 1
 
+        if direction == 1:  # 'east':
+            if (area[coordinates[0]][coordinates[1] + speed] == 0):
+                coordinates[1] += 1
 
+            else:
+                direction = 2
 
-    def set_area(self, area):
-        self.area = area
-    def get_area(self):
-        return self.area
+        if direction == 2:  # "'south':
+            if (area[coordinates[0] + speed][coordinates[1]] == 0):
+                coordinates[0] += 1
 
-    def choose_random_trajectory(self):
-        self.trajectory = random.randint(0, 4)
+            else:
+                direction = 3
 
-    def get_trajectory(self):
-        return self.trajectory
+        if direction == 3:  # 'west':
+            if (area[coordinates[0]][coordinates[1] - 1] == 0):
+                coordinates[1] -= 1
+            else:
+                direction = 0
 
-    def make_move(self): #speed is 1 now
-        coords = self.coordinates[::]
-        while coords == self.coordinates:
+    @staticmethod
+    def make_move(area, coordinates, direction, speed): #speed is 1 now
+        coords = coordinates[::]
+        changing_direction_count = 0
+        while coords==coordinates:
 
-            if self.trajectory==0:
+            if direction==0:
              #'north':
-                if (self.area[self.coordinates[0]-1][self.coordinates[1]]==0):
-                    self.coordinates[0]-=1
+                if (coordinates[0]-speed>0 and  area[coordinates[0]-speed][coordinates[1]]==0):
+                    coordinates[0]-=speed
 
                 else:
-                    self.trajectory = 1
+                    direction = 1
+                    changing_direction_count+=1
 
-            if self.trajectory==1: #'east':
-                if (self.area[self.coordinates[0]][self.coordinates[1]+1] == 0):
-                    self.coordinates[1] += 1
-
-                else:
-                    self.trajectory = 2
-
-            if self.trajectory==2: #"'south':
-                if (self.area[self.coordinates[0]+1][self.coordinates[1]] == 0):
-                    self.coordinates[0] += 1
+            if direction==1: #'east':
+                if (area[coordinates[0]][coordinates[1]+speed] == 0):
+                    coordinates[1] += speed
 
                 else:
-                    self.trajectory = 3
+                    direction = 2
+                    changing_direction_count+=1
 
-            if self.trajectory==3: #'west':
-                if (self.area[self.coordinates[0]][self.coordinates[1] - 1] == 0):
-                    self.coordinates[1] -= 1
+            if direction==2: #"'south':
+                if (area[coordinates[0]+speed][coordinates[1]] == 0):
+                    coordinates[0] += speed
+
                 else:
-                    self.trajectory = 0
+                    direction = 3
+                    changing_direction_count+=1
 
-        return self.coordinates
+            if direction==3: #'west':
+                if (area[coordinates[0]][coordinates[1] - speed] == 0):
+                    coordinates[1] -= speed
+                else:
+                    direction = 0
+                    changing_direction_count+=1
 
-def output(matrix, coords):
-    for i in range(len(matrix[0])):
-        for j in range(len(matrix[0])):
-            if (i, j) == (coords[0], coords[1]):
-                print('X', end='')
-                continue
-            print(matrix[i][j], end='')
-        print()
-    print()
+            if changing_direction_count==4:
+                return None
 
-
-if __name__=='__main__':
-
-    matrix = [[0, 0, 1, 1, 0], [0, 0, 0, 1, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 1], [1, 1, 1, 0, 1]]
-    #print(matrix)
-    bot = Algo(matrix)
-    output(matrix, [len(matrix[0])//2, len(matrix[0])//2])
-
-    for i in range(5):
-        coords = bot.make_move()
-        output(matrix, coords)
-
-
-
-
-
-
-
-
-
+        return [coordinates, direction]
