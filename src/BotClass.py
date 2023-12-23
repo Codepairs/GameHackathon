@@ -45,8 +45,9 @@ class Bot:
     def get_coordinates(self):
         return self.coordinates
 
-
-
+    def check_acceleration(self):
+        if self.direction == 1:
+            pass
 
     def make_move(self):
         coords = self.algorithm.make_move(self.area, self.coordinates, self.direction, self.speed)
