@@ -10,13 +10,13 @@ class Direction(enum.Enum):
     west = 3
 
 class Bot:
-    def __init__(self, scan_radius, attack_radius, speed, direction, coords):
-        self.scan_radius = scan_radius
-        self.attack_radius = attack_radius
-        self.speed = speed
-        self.direction = direction
+    def __init__(self, ship):
+        self.scan_radius = ship["scanRadius"]
+        self.attack_radius = ship["cannonRadius"]
+        self.speed = ship["speed"]
+        self.direction = ship["direction"]
         self.algorithm = Algo
-        self.coordinates = coords
+        self.coordinates = [ship["x"], ship["y"]]
         self.matrix_area = []
 
     def make_area_from_radius(self, whole_map, radius, coords):
@@ -55,19 +55,36 @@ class Bot:
             pass
 
     def make_move(self):
-        coords = self.algorithm.make_move(self.matrix_area, self.coordinates, self.direction, self.speed)
-        if coords==None:
-            self.speed-=2
-        return coords
-        ''' to be continued'''
+        coords, new_direction = self.algorithm.make_move(self.matrix_area, self.coordinates, self.direction, self.speed)
 
-    def attack_opponents(self, opponent_coords, dir, speed):
-        attack_coords = opponent_coords
-        distance = math.sqrt(math.pow(opponent_coords[0]-self.coordinates[0],2)
-                                          + math.pow(opponent_coords[1]-self.coordinates[0],2))
+        if new_direction!=self.direction:
+            self.direction = new_direction
+            self.speed = self.speed//2
+        else:
+            self.speed = self.speed%10 + self.speed//10 * 10 #check if speed is close to max
+
+        self.coordinates = coords
+        return coords
+
+    def choose_closest(self, enemy_ships):
+        closest_enemy_ship = None
+        minimal_distance = 100000000000
+        for enemy_ship in enemy_ships:
+            current_distance = math.sqrt(math.pow(enemy_ship["x"] - self.coordinates[0], 2)
+                                    + math.pow(enemy_ship["y"] - self.coordinates[1], 2))
+            if current_distance < minimal_distance:
+                minimal_distance = current_distance
+                closest_enemy_ship = enemy_ship
+        return closest_enemy_ship
+
+    def attack_opponents(self, enemy_ships):
+        closest_enemy_ship = self.choose_closest(enemy_ships)
+        attack_coords = [closest_enemy_ship['x'], closest_enemy_ship['y']]
+        distance = math.sqrt(math.pow(attack_coords[0]-self.coordinates[0],2)
+                                          + math.pow(attack_coords[1]-self.coordinates[1] ,2))
         if self.attack_radius < distance:
-            cos = distance/(opponent_coords[1]-self.coordinates[1])
-            sin = distance/(opponent_coords[0]-self.coordinates[0])
+            cos = distance/(attack_coords[1]-self.coordinates[1])
+            sin = distance/(attack_coords[0]-self.coordinates[0])
 
             attack_coords[0] = (int) (self.attack_radius*sin) # y
             attack_coords[1] = (int) (self.attack_radius*cos) # x
@@ -88,6 +105,7 @@ def output(matrix, coords):
     print()
 
 
+"""
 if __name__=='__main__':
     matrix = [[0, 0, 1, 1, 0], [0, 0, 0, 1, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 1], [1, 1, 1, 0, 1]]
     n = len(matrix[0])
@@ -100,3 +118,4 @@ if __name__=='__main__':
         bot.set_coordinates(coords)
         bot.set_direction(new_direction)
         output(matrix, coords)
+        """

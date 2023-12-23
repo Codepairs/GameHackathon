@@ -100,7 +100,7 @@ class GameAPI:
 
     def scan_around_ships_requests(self) -> tuple | bool:
         """
-        '/api/scan' Scan around ships
+        '/api/scan' Scan around ally_ships
         :return: my_ships, enemy_ships, zone, tick
         """
         api_extension = '/api/scan'
@@ -155,8 +155,8 @@ class GameAPI:
 
     def ships_control_request(self, ships: list):
         """
-        '/api/shipCommand' Control ships
-        "ships": [
+        '/api/shipCommand' Control ally_ships
+        "ally_ships": [
         {
         "id": 34,
         "changeSpeed": 3,
@@ -167,7 +167,7 @@ class GameAPI:
                 }
             }
         ]
-        :param ships: list of ships
+        :param ships: list of ally_ships
         :return: result of request
         """
         api_extension = '/api/shipCommand'
@@ -175,7 +175,7 @@ class GameAPI:
             'X-API-Key': self._token
         }
         data = dumps({
-            'ships': ships
+            'ally_ships': ships
         })
         self._logger.send_message("Отправляем запрос на контроль кораблей", "info")
         control_response = requests.post(url=self._url + api_extension, headers=headers, data=data)
