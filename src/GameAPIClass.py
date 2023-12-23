@@ -7,7 +7,7 @@ import requests
 
 class GameAPI:
     """
-    GameAPI class. Used to send and receive requests from remote GAME server.
+    GameAPI class. Used to send and receive requests from remote GAME coordinator.
     """
 
     def __init__(self):
@@ -113,7 +113,10 @@ class GameAPI:
             scan = scan_response.json()["scan"]
             my_ships = scan["myShips"]
             enemy_ships = scan["enemyShips"]
-            zone = scan["zone"]
+            try:
+                zone = scan["zone"]
+            except KeyError:
+                zone = None
             tick = scan["tick"]
             self._logger.send_message("Сканирование вокруг кораблей прошло успешно!", "info")
             return my_ships, enemy_ships, zone, tick
