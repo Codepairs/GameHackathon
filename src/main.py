@@ -2,6 +2,7 @@ import time
 from pprint import pprint
 from GameAPIClass import GameAPI
 from AlgoClass import Algo
+from BotClass import Bot
 
 
 def main():
@@ -22,7 +23,9 @@ if __name__ == '__main__':
 
     all_changes = []
     for ship in my_ships:
-        changes = Algo.setup_changes(ship['id'], 3, 90, 0, 0)
+        bot = Bot(ship)
+        attack_coordinates = bot.attack_opponents(enemy_ships)
+        changes = Algo.setup_changes(ship['id'], 3, 90, attack_coordinates[1], attack_coordinates[0])
         all_changes.append(changes)
     print(server.ships_control_request(all_changes))
 
