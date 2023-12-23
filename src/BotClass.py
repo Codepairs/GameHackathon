@@ -10,12 +10,13 @@ class Direction(enum.Enum):
     west = 3
 
 class Bot:
-    def __init__(self, area, speed, direction, coords):
-        self.area = area
+    def __init__(self, scan_radius, speed, direction, coords):
+        self.scan_radius = scan_radius
         self.speed = speed
         self.direction = direction
         self.algorithm = Algo
         self.coordinates = coords
+
 
     def set_speed(self, speed):
         self.speed = speed
@@ -23,7 +24,7 @@ class Bot:
     def get_speed(self):
         return self.speed
 
-    def choose_random_direction(self):
+    def set_random_direction(self):
         self.direction = random.randint(0, 4)
 
 
@@ -34,10 +35,10 @@ class Bot:
         return self.direction
 
     def set_area(self, area):
-        self.area = area
+        self.scan_radius = area
 
     def get_area(self):
-        return self.area
+        return self.scan_radius
 
     def set_coordinates(self, coords):
         self.coordinates = coords
@@ -49,11 +50,17 @@ class Bot:
 
 
     def make_move(self):
-        coords = self.algorithm.make_move(self.area, self.coordinates, self.direction, self.speed)
+        coords = self.algorithm.make_move(self.scan_radius, self.coordinates, self.direction, self.speed)
         if coords==None:
             self.speed-=2
         return coords
         ''' to be continued'''
+
+    def attack_opponents(self, x, y, dir, speed):
+        attack_coords = x,y
+
+
+
 
 def output(matrix, coords):
     for i in range(len(matrix[0])):
