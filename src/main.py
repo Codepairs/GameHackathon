@@ -1,10 +1,8 @@
 import time
 from pprint import pprint
 from GameAPIClass import GameAPI
-from GameMapClass import GameMap
-import pygame as pg
-from GameMapClass import screen
-import numpy as np
+from AlgoClass import Algo
+
 
 def main():
     coordinator = GameAPI()
@@ -17,12 +15,18 @@ def main():
 
 
 if __name__ == '__main__':
-    pg.init()
     server = GameAPI()
     server.deathmatch_registration_request()
-    islands_map = server.map_request()
-    game_map = GameMap(islands_map)
-    game_map.run()
+    my_ships, enemy_ships, tick, zone = server.scan_around_ships_requests()
+    pprint(my_ships[0])
+
+    all_changes = []
+    for ship in my_ships:
+        changes = Algo.setup_changes(ship['id'], 3, 90, 0, 0)
+        all_changes.append(changes)
+    print(server.ships_control_request(all_changes))
+
+
 
 
 
