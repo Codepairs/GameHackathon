@@ -11,7 +11,7 @@ import random
 class Attack():
     necessary_elements = [] #До определнного момента я помнил для чего я вводил списки
     
-    def __init__(self, opponent_coords, dir, speed, x_start, y_start, x_fin, y_fin):
+    def __init__(self, opponent_coords, dir, speed, cannonRadius = None):
         necessary_elements += [opponent_coords], [dir], [speed]
 
     
@@ -40,7 +40,10 @@ class Attack():
             tactical_shot[0] -= speed
         if speed < 0 and dir == 3:
             tactical_shot[1] += speed
-
+        if cannonRadius[0] >= tactical_shot[0] and cannonRadius[1] >= tactical_shot[1]:
+            return tactical_shot
+        else:
+            return('Out of range')
 
 
 
