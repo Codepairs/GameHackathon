@@ -1,10 +1,10 @@
 import requests
 import numpy as np
 
+
 class Map:
     def __init__(self):
         self.map = np.zeros([2000, 2000])
-
 
     def setup_map(self, url):
         islands_map = requests.get(url).json()
@@ -17,8 +17,7 @@ class Map:
             for j in range(island_y, matrix.shape[0]):
                 for i in range(island_x, matrix.shape[1]):
                     self.map[j][i] = 1
-
+        return self.map
 
     def get_map(self):
         return self.map
-
