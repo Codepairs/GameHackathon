@@ -52,7 +52,7 @@ class Bot:
 
 
     def set_random_direction(self):
-        direction_value = random.randint(0, 4)
+        direction_value = random.randint(0, 3)
         self.direction = Direction(direction_value).name
 
 
@@ -88,7 +88,8 @@ class Bot:
 
     def make_move_to_zone(self):
         new_speed, new_direction = self.algorithm.make_move_to_zone(self.map, self.coordinates, self.direction, self.speed, self.size, self.direction_weights)
-
+        if new_direction == 0:
+            new_direction = None
         return new_speed, new_direction
 
     def choose_closest(self, enemy_ships):
@@ -103,19 +104,43 @@ class Bot:
         return closest_enemy_ship
 
     def attack_opponents(self, enemy_ships):
+        if len(enemy_ships) == 0:
+            attack_coords = [None, None]
+            return attack_coords
         closest_enemy_ship = self.choose_closest(enemy_ships)
         attack_coords = [closest_enemy_ship['x'], closest_enemy_ship['y']]
         distance = math.sqrt(math.pow(attack_coords[0]-self.coordinates[0],2)
                                           + math.pow(attack_coords[1]-self.coordinates[1], 2))
-        if self.attack_radius < distance:
-            cos = distance/(attack_coords[1]-self.coordinates[1])
-            sin = distance/(attack_coords[0]-self.coordinates[0])
+        if distance < self.attack_radius:
 
-            attack_coords[0] = (int) (self.attack_radius*sin) # y
-            attack_coords[1] = (int) (self.attack_radius*cos) # x
+            attack_coords[0] = closest_enemy_ship['x']
+            attack_coords[1] = closest_enemy_ship['y']
+        else:
+            attack_coords = [None, None]
+            return attack_coords
+
+        enemy_speed = closest_enemy_ship['speed']
+        enemy_direction = closest_enemy_ship['direction']
+        if enemy_speed > 0 and enemy_direction == 0:
+            attack_coords[0] -= enemy_speed
+        if enemy_speed > 0 and enemy_direction == 1:
+            attack_coords[1] += enemy_speed
+        if enemy_speed > 0 and enemy_direction == 2:
+            attack_coords[0] += enemy_speed
+        if enemy_speed > 0 and enemy_direction == 3:
+            attack_coords[1] -= enemy_speed
+            # Если скорость меньше 0 то изменение координат корабля будетобратно изменению координат при положительной скорости
+        if enemy_speed < 0 and enemy_direction == 0:
+            attack_coords[0] += enemy_speed
+        if enemy_speed < 0 and enemy_direction == 1:
+            attack_coords[1] -= enemy_speed
+        if enemy_speed < 0 and enemy_direction == 2:
+            attack_coords[0] -= enemy_speed
+        if enemy_speed < 0 and enemy_direction == 3:
+            attack_coords[1] += enemy_speed
+
+        print(self.coordinates, attack_coords, closest_enemy_ship['x'], closest_enemy_ship['y'])
         return attack_coords
-
-
 
 
 

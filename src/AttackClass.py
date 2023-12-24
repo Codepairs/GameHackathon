@@ -19,25 +19,25 @@ class Attack():
     for i in attack_coords:
         reformation_ac.append(i)
     
-    def smart_attack(self, reformation_ac, dir, speed):
+    def smart_attack(self, reformation_ac, enemy_direction, enemy_speed):
         tactical_shot = reformation_ac[::] # учитываю что первый элемент - y, а второй - x
-        if speed > 0 and dir == 0:
-            tactical_shot[0] -= speed
-        if speed > 0 and dir == 1:
-            tactical_shot[1] += speed
-        if speed > 0 and dir == 2:
-            tactical_shot[0] += speed
-        if speed > 0 and dir == 3:
-            tactical_shot[1] -= speed
+        if enemy_speed > 0 and enemy_direction == 0:
+            tactical_shot[0] -= enemy_speed
+        if enemy_speed > 0 and enemy_direction == 1:
+            tactical_shot[1] += enemy_speed
+        if enemy_speed > 0 and enemy_direction == 2:
+            tactical_shot[0] += enemy_speed
+        if enemy_speed > 0 and enemy_direction == 3:
+            tactical_shot[1] -= enemy_speed
             #Если скорость меньше 0 то изменение координат корабля будетобратно изменению координат при положительной скорости
-        if speed < 0 and dir == 0:
-            tactical_shot[0] += speed
-        if speed < 0 and dir == 1:
-            tactical_shot[1] -= speed
-        if speed < 0 and dir == 2:
-            tactical_shot[0] -= speed
-        if speed < 0 and dir == 3:
-            tactical_shot[1] += speed
+        if enemy_speed < 0 and enemy_direction == 0:
+            tactical_shot[0] += enemy_speed
+        if enemy_speed < 0 and enemy_direction == 1:
+            tactical_shot[1] -= enemy_speed
+        if enemy_speed < 0 and enemy_direction == 2:
+            tactical_shot[0] -= enemy_speed
+        if enemy_speed < 0 and enemy_direction == 3:
+            tactical_shot[1] += enemy_speed
         if cannonRadius[0] + 1 >= tactical_shot[0] and cannonRadius[1] + 1 >= tactical_shot[1]: #К координате предельно допустимого y и x прибавил по единице так как наш выстрел по точной координате захватывает по одной клетке рядом с этой координатой
             return tactical_shot
         else:

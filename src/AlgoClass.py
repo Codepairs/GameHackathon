@@ -228,7 +228,7 @@ class Algo:
                 elif (Algo.check_south(whole_map, ship_coordinates, ship_speed)):
                     direction_degrees = -90
                     ship_speed //= 2
-        ship_speed = ship_speed%10 + ship_speed//10 * 10 #check if speed is close to max
+        ship_speed = ship_speed%10 + ship_speed//10 * 10 #check if enemy_speed is close to max
         return [ship_speed, direction_degrees]
 
 if __name__ == '__main__':
