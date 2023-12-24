@@ -3,9 +3,9 @@ import random
 map = []
 
 def generate_map():
-    while len(map) < 2000:
+    while len(map) < 20:
         line = []
-        for i in range(2000):
+        for i in range(20):
             line.append(random.randint(0,1))
         map.append(line)
 
