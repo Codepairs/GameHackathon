@@ -157,8 +157,9 @@ class Algo:
     # смотрю направление движения начальное -> ПРОВЕРЯЮ ДОСТУПНЫЕ ПОВОРОТЫ И ДВИЖЕНИЯ через взвешенный массив
     # -> проверяю их доступность
     @staticmethod
-    def make_move_to_zone(whole_map, ship_coordinates, ship_direction, ship_speed, ship_size, directions_weights):
+    def make_move_to_zone(whole_map, ship_coordinates, ship_direction_string, ship_speed, ship_size, directions_weights):
         direction_degrees = 0
+        ship_direction = Direction[ship_direction_string].value
         match (ship_direction):
             case Direction.north.value:
                 return Algo.check_north_max(whole_map, ship_coordinates, ship_speed, ship_size, directions_weights)
@@ -176,8 +177,9 @@ class Algo:
 
 
     @staticmethod
-    def make_move(whole_map, ship_coordinates, ship_direction, ship_speed, ship_size):
+    def make_move(whole_map, ship_coordinates, ship_direction_string, ship_speed, ship_size):
         direction_degrees = 0
+        ship_direction = Direction[ship_direction_string].value
         match(ship_direction):
             case Direction.north.value:
                 if (Algo.check_north(whole_map, ship_coordinates, ship_speed*2 + ship_size)):
@@ -230,4 +232,5 @@ class Algo:
         return [ship_speed, direction_degrees]
 
 if __name__ == '__main__':
-    print(Direction.north)
+    print(Direction.south.value)
+    #print()
