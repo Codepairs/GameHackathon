@@ -25,6 +25,7 @@ if __name__ == '__main__':
         tick_changes = []
         for ship in my_ships:
             bot = Bot(ship, global_map)
+            bot.set_random_direction()
             attack_coordinates = None, None
             if len(enemy_ships) != 0:
                 attack_coordinates = bot.attack_opponents(enemy_ships)
