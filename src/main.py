@@ -345,6 +345,9 @@ if __name__ == '__main__':
             bot = Bot(ship)
             attack_coordinates = bot.attack_opponents(enemy_ships)
             visual.render_shots(attack_coordinates)
+
+            bot.calculate_direction_weights() # !!!! сюда нужно передать координаты центра зоны
+
             changes = Algo.setup_changes(ship['id'], speed=3, rotate=90, x=attack_coordinates[1], y=attack_coordinates[0])
             tick_changes.append(changes)
         #server.ships_control_request(tick_changes)
