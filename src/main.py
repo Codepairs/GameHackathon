@@ -1,16 +1,16 @@
 import random
-import time
 from pprint import pprint
 from GameAPIClass import GameAPI
 from GameMapClass import GameMap
-from AlgoClass import Algo
 from BotClass import Bot
+from AlgoClass import Algo
 import threading
 
 
 if __name__ == '__main__':
     server = GameAPI()
     server.deathmatch_registration_request()
+    server.battleroyal_registration_request()
     world_map = server.map_request()
     visual = GameMap(world_map)
     threading.Thread(target=visual.__init__).start()
@@ -34,6 +34,7 @@ if __name__ == '__main__':
             if len(enemy_ships) != 0:
                 attack_coordinates = bot.attack_opponents(enemy_ships)
                 visual.render_shots(attack_coordinates)
+            change_speed, rotate = Algo.make
             changes = server.create_changes(ship['id'], changeSpeed=3, rotate=None, x=attack_coordinates[1], y=attack_coordinates[0])
 >>>>>>> f46f2a17dd8e5230a71b34d0c2fcc1f09e72b5ab
             tick_changes.append(changes)

@@ -81,7 +81,7 @@ class Bot:
 
         new_speed, new_direction = self.algorithm.make_move(self.radius, self.coordinates, self.direction, self.speed, self.size)
         return new_speed, new_direction
-    
+
     def make_move_to_zone(self):
         new_speed, new_direction = self.algorithm.make_move_to_zone(self.radius, self.coordinates, self.direction, self.speed, self.size, self.direction_weights)
 
