@@ -15,18 +15,40 @@ class Bot:
         self.attack_radius = ship["cannonRadius"]
         self.speed = ship["speed"]
         self.direction = ship["direction"]
+        self.size = ship["size"]
         self.algorithm = Algo
         self.coordinates = [ship["x"], ship["y"]]
-        self.matrix_area = []
+        self.direction_weights = [1,1,1,1] #north, east, south, west
 
     def make_area_from_radius(self, whole_map, radius, coords):
-        self.matrix_area = whole_map[coords[1]-radius:coords[1] + radius, coords[0]-radius:coords[0] + radius]
+        self.radius = whole_map[coords[1] - radius:coords[1] + radius, coords[0] - radius:coords[0] + radius]
 
     def set_speed(self, speed):
         self.speed = speed
 
     def get_speed(self):
         return self.speed
+
+    def calculate_direction_weights(self, zone_center_coords):
+        #ship_x = self.coordinates[1]
+        #ship_y = self.coordinates[0]
+        distance = math.sqrt(math.pow(zone_center_coords[0] - self.coordinates[0], 2)
+                             + math.pow(zone_center_coords[1] - self.coordinates[1], 2))
+        cos = distance / (zone_center_coords[1] - self.coordinates[1])
+        sin = distance / (zone_center_coords[0] - self.coordinates[0])
+
+        if (cos>0 and sin>0):
+            self.direction_weights = [3, 3, 1, 1]
+
+        if (cos > 0 and sin < 0):
+            self.direction_weights = [1, 3, 3, 1]
+
+        if (cos < 0 and sin < 0):
+            self.direction_weights = [1, 1, 3, 3]
+
+        if (cos < 0 and sin > 0):
+            self.direction_weights = [3, 1, 1, 3]
+
 
     def set_random_direction(self):
         self.direction = random.randint(0, 4)
@@ -39,10 +61,10 @@ class Bot:
         return self.direction
 
     def set_area(self, area):
-        self.matrix_area = area
+        self.radius = area
 
     def get_area(self):
-        return self.matrix_area
+        return self.radius
 
     def set_coordinates(self, coords):
         self.coordinates = coords
@@ -55,16 +77,10 @@ class Bot:
             pass
 
     def make_move(self):
-        coords, new_direction = self.algorithm.make_move(self.matrix_area, self.coordinates, self.direction, self.speed)
+        #coefficient = self.size
 
-        if new_direction!=self.direction:
-            self.direction = new_direction
-            self.speed = self.speed//2
-        else:
-            self.speed = self.speed%10 + self.speed//10 * 10 #check if speed is close to max
-
-        self.coordinates = coords
-        return coords
+        new_speed, new_direction = self.algorithm.make_move(self.radius, self.coordinates, self.direction, self.speed, self.size)
+        return new_speed, new_direction
 
     def choose_closest(self, enemy_ships):
         closest_enemy_ship = None
