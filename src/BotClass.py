@@ -52,7 +52,8 @@ class Bot:
 
 
     def set_random_direction(self):
-        self.direction = random.randint(0, 4)
+        direction_value = random.randint(0, 4)
+        self.direction = Direction(direction_value).name
 
 
     def set_direction(self, direction):
