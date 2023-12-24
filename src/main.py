@@ -29,7 +29,9 @@ if __name__ == '__main__':
             if len(enemy_ships) != 0:
                 attack_coordinates = bot.attack_opponents(enemy_ships)
                 visual.render_shots(attack_coordinates)
-            change_speed, rotate = bot.make_move_to_zone()
+            #change_speed, rotate = bot.make_move_to_zone()
+            change_speed, rotate = bot.make_move()
+            print(change_speed, rotate)
             changes = server.create_changes(ship['id'], changeSpeed=change_speed, rotate=rotate, x=attack_coordinates[1], y=attack_coordinates[0])
             tick_changes.append(changes)
         server.scan_at_point_request(random.randint(0, 2000), random.randint(0, 2000))

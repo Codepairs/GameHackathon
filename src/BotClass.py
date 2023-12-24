@@ -16,7 +16,7 @@ class Bot:
         self.speed = ship["speed"]
         self.direction = ship["direction"]
         self.size = ship["size"]
-        self.algorithm = Algo
+        self.algorithm = Algo()
         self.coordinates = [ship["x"], ship["y"]]
         self.direction_weights = [1,1,1,1] #north, east, south, west
         self.map = map
@@ -81,6 +81,8 @@ class Bot:
         #coefficient = self.size
 
         new_speed, new_direction = self.algorithm.make_move(self.map, self.coordinates, self.direction, self.speed, self.size)
+        if new_direction == 0:
+            new_direction = None
         return new_speed, new_direction
 
     def make_move_to_zone(self):
