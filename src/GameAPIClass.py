@@ -153,6 +153,24 @@ class GameAPI:
             self._logger.send_message("Ошибка при сканировании DeathMatch! Плохой ответ...", "error")
             return False
 
+    def create_changes(self, id, changeSpeed, rotate, x, y):
+        if x is None or y is None:
+            return {
+                "id": id,
+                "changeSpeed": changeSpeed,
+                "rotate": rotate
+            }
+        else:
+            return {
+                "id": id,
+                "changeSpeed": changeSpeed,
+                "rotate": rotate,
+                "cannonShoot": {
+                    "x": x,
+                    "y": y
+                }
+            }
+
     def ships_control_request(self, ships: list):
         """
         '/api/shipCommand' Control ally_ships
@@ -175,7 +193,7 @@ class GameAPI:
             'X-API-Key': self._token
         }
         data = dumps({
-            'ally_ships': ships
+            'ships': ships
         })
         self._logger.send_message("Отправляем запрос на контроль кораблей", "info")
         control_response = requests.post(url=self._url + api_extension, headers=headers, data=data)
