@@ -3,22 +3,24 @@ import random
 import math
 from AlgoClass import Algo
 
+
 class Direction(enum.Enum):
     north = 0
     east = 1
     south = 2
     west = 3
 
+
 class Bot:
     def __init__(self, ship, map):
         self.scan_radius = ship["scanRadius"]
         self.attack_radius = ship["cannonRadius"]
         self.speed = ship["speed"]
-        self.direction = ship["direction"]
+        self.direction = self.get_random_direction() if self.speed == 0 else ship["direction"]
         self.size = ship["size"]
         self.algorithm = Algo()
         self.coordinates = [ship["x"], ship["y"]]
-        self.direction_weights = [1,1,1,1] #north, east, south, west
+        self.direction_weights = [1, 1, 1, 1]  # north, east, south, west
         self.map = map
 
     def make_area_from_radius(self, whole_map, radius, coords):
@@ -31,14 +33,14 @@ class Bot:
         return self.speed
 
     def calculate_direction_weights(self, zone_center_coords):
-        #ship_x = self.coordinates[1]
-        #ship_y = self.coordinates[0]
+        # ship_x = self.coordinates[1]
+        # ship_y = self.coordinates[0]
         distance = math.sqrt(math.pow(zone_center_coords[0] - self.coordinates[0], 2)
                              + math.pow(zone_center_coords[1] - self.coordinates[1], 2))
         cos = distance / (zone_center_coords[1] - self.coordinates[1])
         sin = distance / (zone_center_coords[0] - self.coordinates[0])
 
-        if (cos>0 and sin>0):
+        if (cos > 0 and sin > 0):
             self.direction_weights = [3, 3, 1, 1]
 
         if (cos > 0 and sin < 0):
@@ -49,12 +51,11 @@ class Bot:
 
         if (cos < 0 and sin > 0):
             self.direction_weights = [3, 1, 1, 3]
+        print("DIRECTION WEIGHTS", self.direction_weights)
 
-
-    def set_random_direction(self):
+    def get_random_direction(self):
         direction_value = random.randint(0, 4)
-        self.direction = Direction(direction_value).name
-
+        return Direction(direction_value).name
 
     def set_direction(self, direction):
         self.direction = direction
@@ -79,16 +80,19 @@ class Bot:
             pass
 
     def make_move(self):
-        #coefficient = self.size
+        # coefficient = self.size
 
-        new_speed, new_direction = self.algorithm.make_move(self.map, self.coordinates, self.direction, self.speed, self.size)
+        new_speed, new_direction = self.algorithm.make_move(self.map, self.coordinates, self.direction, self.speed,
+                                                            self.size)
         if new_direction == 0:
             new_direction = None
         return new_speed, new_direction
 
     def make_move_to_zone(self):
-        new_speed, new_direction = self.algorithm.make_move_to_zone(self.map, self.coordinates, self.direction, self.speed, self.size, self.direction_weights)
-
+        new_speed, new_direction = self.algorithm.make_move_to_zone(self.map, self.coordinates, self.direction,
+                                                                    self.speed, self.size, self.direction_weights)
+        if new_direction == 0:
+            new_direction = None
         return new_speed, new_direction
 
     def choose_closest(self, enemy_ships):
@@ -96,7 +100,7 @@ class Bot:
         minimal_distance = 100000000000
         for enemy_ship in enemy_ships:
             current_distance = math.sqrt(math.pow(enemy_ship["x"] - self.coordinates[0], 2)
-                                    + math.pow(enemy_ship["y"] - self.coordinates[1], 2))
+                                         + math.pow(enemy_ship["y"] - self.coordinates[1], 2))
             if current_distance < minimal_distance:
                 minimal_distance = current_distance
                 closest_enemy_ship = enemy_ship
@@ -105,18 +109,15 @@ class Bot:
     def attack_opponents(self, enemy_ships):
         closest_enemy_ship = self.choose_closest(enemy_ships)
         attack_coords = [closest_enemy_ship['x'], closest_enemy_ship['y']]
-        distance = math.sqrt(math.pow(attack_coords[0]-self.coordinates[0],2)
-                                          + math.pow(attack_coords[1]-self.coordinates[1], 2))
+        distance = math.sqrt(math.pow(attack_coords[0] - self.coordinates[0], 2)
+                             + math.pow(attack_coords[1] - self.coordinates[1], 2))
         if self.attack_radius < distance:
-            cos = distance/(attack_coords[1]-self.coordinates[1])
-            sin = distance/(attack_coords[0]-self.coordinates[0])
+            cos = distance / (attack_coords[1] - self.coordinates[1])
+            sin = distance / (attack_coords[0] - self.coordinates[0])
 
-            attack_coords[0] = (int) (self.attack_radius*sin) # y
-            attack_coords[1] = (int) (self.attack_radius*cos) # x
+            attack_coords[0] = (int)(self.attack_radius * sin)  # y
+            attack_coords[1] = (int)(self.attack_radius * cos)  # x
         return attack_coords
-
-
-
 
 
 def output(matrix, coords):
