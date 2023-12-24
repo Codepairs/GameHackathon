@@ -14,7 +14,7 @@ class Bot:
         self.scan_radius = ship["scanRadius"]
         self.attack_radius = ship["cannonRadius"]
         self.speed = ship["speed"]
-        self.direction = ship["direction"]
+        self.direction = self.set_random_direction()
         self.size = ship["size"]
         self.algorithm = Algo()
         self.coordinates = [ship["x"], ship["y"]]
@@ -52,8 +52,9 @@ class Bot:
 
 
     def set_random_direction(self):
-        direction_value = random.randint(0, 3)
+        direction_value = 3
         self.direction = Direction(direction_value).name
+        return self.direction
 
 
     def set_direction(self, direction):
@@ -80,8 +81,7 @@ class Bot:
 
     def make_move(self):
         #coefficient = self.size
-
-        new_speed, new_direction = self.algorithm.make_move(self.map, self.coordinates, self.direction, self.speed, self.size)
+        new_speed, new_direction = self.algorithm.make_move(self.map, self.coordinates, self.set_random_direction(), self.speed, self.size)
         if new_direction == 0:
             new_direction = None
         return new_speed, new_direction
@@ -111,13 +111,6 @@ class Bot:
         attack_coords = [closest_enemy_ship['x'], closest_enemy_ship['y']]
         distance = math.sqrt(math.pow(attack_coords[0]-self.coordinates[0],2)
                                           + math.pow(attack_coords[1]-self.coordinates[1], 2))
-        if distance < self.attack_radius:
-
-            attack_coords[0] = closest_enemy_ship['x']
-            attack_coords[1] = closest_enemy_ship['y']
-        else:
-            attack_coords = [None, None]
-            return attack_coords
 
         enemy_speed = closest_enemy_ship['speed']
         enemy_direction = closest_enemy_ship['direction']
@@ -140,6 +133,14 @@ class Bot:
             attack_coords[1] += enemy_speed
 
         print(self.coordinates, attack_coords, closest_enemy_ship['x'], closest_enemy_ship['y'])
+
+        if distance < self.attack_radius:
+
+            attack_coords[0] = closest_enemy_ship['x']
+            attack_coords[1] = closest_enemy_ship['y']
+        else:
+            attack_coords = [None, None]
+            return attack_coords
         return attack_coords
 
 

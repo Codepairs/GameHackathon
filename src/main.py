@@ -13,9 +13,9 @@ if __name__ == '__main__':
     """
     Выбираем куда отправлять запрос, десматч или рояль
     """
-    server.deathmatch_registration_request()
+    #server.deathmatch_registration_request()
     #server.leave_request()
-    #server.battleroyal_registration_request()
+    server.battleroyal_registration_request()
 
     # Получаем ссылку на карту в json
     world_map = server.map_request()
@@ -34,7 +34,6 @@ if __name__ == '__main__':
         # Для каждого корабля ставим ИИ
         for ship in my_ships:
             bot = Bot(ship, global_map)
-            bot.set_random_direction()
             attack_coordinates = bot.attack_opponents(enemy_ships)
             # Атакуем если есть враги
             if attack_coordinates[0] is not None and attack_coordinates[1] is not None:
@@ -42,9 +41,9 @@ if __name__ == '__main__':
             """
             Тут выбор для десматча и рояля
             """
-            #change_speed, rotate = bot.make_move_to_zone()
-            change_speed, rotate = bot.make_move()
-           # print(change_speed, rotate)
+            change_speed, rotate = bot.make_move_to_zone()
+            #change_speed, rotate = bot.make_move()
+            print(change_speed, rotate)
             print(f"Число попаданий: {ship['cannonShootSuccessCount']}")
             changes = server.create_changes(ship['id'], changeSpeed=change_speed, rotate=rotate, x=attack_coordinates[1], y=attack_coordinates[0])
             tick_changes.append(changes)
