@@ -1,6 +1,4 @@
 from BotClass import Bot
-import math
-import random
 
 
 # Необходимо учитывать скорость корабля
