@@ -110,7 +110,10 @@ class GameAPI:
         self._logger.send_message("Отправляем запрос на сканирование вокруг кораблей", "info")
         scan_response = requests.get(url=self._url + api_extension, headers=headers)
         if scan_response.ok:
+            print(scan_response)
+            print(scan_response.json())
             scan = scan_response.json()["scan"]
+
             my_ships = scan["myShips"]
             enemy_ships = scan["enemyShips"]
             try:

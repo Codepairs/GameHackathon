@@ -30,6 +30,7 @@ class Algo:
     def check_north(whole_map, ship_coordinates, distance):
         if ((ship_coordinates[0] - distance) > 0 and
                 whole_map[ship_coordinates[0] - distance][ship_coordinates[1]] == 0):
+            print(whole_map[ship_coordinates[0] - distance][ship_coordinates[1]])
             return True
         return False
 
@@ -37,6 +38,7 @@ class Algo:
     def check_east(whole_map, ship_coordinates, distance):
         if ((ship_coordinates[1] + distance) < 2000 and
                 whole_map[ship_coordinates[0]][ship_coordinates[1] + distance] == 0):
+            print(whole_map[ship_coordinates[0] - distance][ship_coordinates[1]])
             return True
         return False
 
@@ -44,6 +46,7 @@ class Algo:
     def check_south(whole_map, ship_coordinates, distance):
         if ((ship_coordinates[0] + distance) < 2000 and
                 whole_map[ship_coordinates[0] + distance][ship_coordinates[1]] == 0):
+            print(whole_map[ship_coordinates[0] + distance][ship_coordinates[1]])
             return True
         return False
 
@@ -67,7 +70,7 @@ class Algo:
                          west_free * directions_weights[3])
 
         if north_free * directions_weights[0] == max_points:
-            delta_speed += 5
+            delta_speed += 2
 
         elif east_free * directions_weights[1] == max_points:
             direction_degrees = 90
@@ -77,6 +80,7 @@ class Algo:
             direction_degrees = -90
             delta_speed -= 5
         # ship_speed = ship_speed % 20 + ship_speed // 20 * 20
+        print("north", [delta_speed, direction_degrees])
         return [delta_speed, direction_degrees]
 
     @staticmethod
@@ -91,8 +95,7 @@ class Algo:
                          south_free * directions_weights[2])
 
         if east_free * directions_weights[1] == max_points:
-            delta_speed += 5
-
+            delta_speed += 2 * random.randint(-1,1)
         elif (north_free * directions_weights[0] == max_points):
             direction_degrees = -90
             delta_speed -= 5
@@ -101,6 +104,7 @@ class Algo:
             direction_degrees = 90
             delta_speed -= 5
         # ship_speed = ship_speed % 20 + ship_speed // 20 * 20
+        print("east",[delta_speed, direction_degrees])
         return [delta_speed, direction_degrees]
 
     @staticmethod
@@ -115,7 +119,7 @@ class Algo:
                          west_free * directions_weights[3])
 
         if south_free * directions_weights[2] == max_points:
-            delta_speed += 5
+            delta_speed += 2 * random.randint(-1,1)
 
         elif (east_free * directions_weights[1] == max_points):
             direction_degrees = -90
@@ -125,6 +129,7 @@ class Algo:
             direction_degrees = 90
             delta_speed -= 5
         # ship_speed = ship_speed % 20 + ship_speed // 20 * 20
+        print("south",[delta_speed, direction_degrees])
         return [delta_speed, direction_degrees]
 
     @staticmethod
@@ -139,7 +144,7 @@ class Algo:
                          west_free * directions_weights[3])
 
         if west_free * directions_weights[3] == max_points:
-            delta_speed += 5
+            delta_speed += 2 * random.randint(-1,1)
 
         elif (south_free * directions_weights[2] == max_points):
             direction_degrees = -90
@@ -149,6 +154,7 @@ class Algo:
             direction_degrees = 90
             delta_speed -= 5
         # ship_speed = ship_speed % 20 + ship_speed // 20 * 20
+        print("west",[delta_speed, direction_degrees])
         return [delta_speed, direction_degrees]
 
     # по сути мы знаем координаты всех островов. значит, известна зона, куда лучше не идти.
