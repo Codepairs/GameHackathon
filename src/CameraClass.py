@@ -1,18 +1,14 @@
-import pygame as pg
-
-
 class Camera:
-    def __init__(self, pos_x, pos_y, width, height, map_size, zoom):
+    def __init__(self, pos_x, pos_y, width, height, map_size):
         self.x = pos_x
         self.y = pos_y
         self.w = width
         self.h = height
-        self.map_size = map_size
-        self.zoom = zoom
-        self.default_zoom = 1
+        self.center_x = pos_x + width / 2
+        self.center_y = pos_y + height / 2
         self.default_w = width
         self.default_h = height
-        self.default_map_size = map_size
+        self.map_size = map_size
 
     def set_map_size(self, map_size):
         self.map_size = map_size
@@ -31,6 +27,8 @@ class Camera:
             self.x = self.map_size[0] - self.w
         if self.y + self.h > self.map_size[1]:
             self.y = self.map_size[1] - self.h
+        self.center_x = self.x + self.w / 2
+        self.center_y = self.y + self.h / 2
 
     def output(self):
-        print(self.x, self.y, self.w, self.h, self.zoom)
+        print(self.x, self.y, self.w, self.h)

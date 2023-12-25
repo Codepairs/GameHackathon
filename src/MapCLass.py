@@ -19,5 +19,15 @@ class Map:
                     self.map[j][i] = 1
         return self.map
 
+    def generate_map(self, islands):
+        for island in islands:
+            matrix: np.array = np.array(island['map'])
+            island_x = island['start'][0]
+            island_y = island['start'][1]
+            for j in range(island_y, matrix.shape[0]):
+                for i in range(island_x, matrix.shape[1]):
+                    self.map[j][i] = 1
+        return self.map
+
     def get_map(self):
         return self.map

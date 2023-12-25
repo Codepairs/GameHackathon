@@ -101,7 +101,7 @@ class GameAPI:
     def scan_around_ships_requests(self) -> tuple | bool:
         """
         '/api/scan' Scan around ally_ships
-        :return: my_ships, enemy_ships, zone, tick
+        :return: ally_ships, enemy_ships, zone, tick
         """
         api_extension = '/api/scan'
         headers = {

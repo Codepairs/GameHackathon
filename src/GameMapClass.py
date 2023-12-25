@@ -2,6 +2,8 @@ from CameraClass import Camera
 import requests
 import pygame as pg
 import json
+from BotClass import Bot
+from MapCLass import Map
 
 white = pg.Color(255, 255, 255)
 red = pg.Color(255, 0, 0)
@@ -13,6 +15,7 @@ enemy_scan_color = white
 ally_scan_color = white
 ally_attack_color = green
 enemy_attack_color = red
+projectile_color = pg.Color(255, 255, 0)
 enemy_ship_color = pg.Color(128, 0, 0)
 ally_ship_color = pg.Color(64, 89, 19)
 water_color = pg.Color(157, 78, 221)
@@ -23,28 +26,29 @@ class GameMap:
     def __init__(self, url):
         pg.init()
         self.url = url
-        self.my_ships = None
+        self.ally_ships = None
         self.enemy_ships = None
         self.size = self.w, self.h = 1600, 800
-        #self.flags = (pg.RESIZABLE | pg.FULLSCREEN)
-        self.screen = pg.display.set_mode(self.size)
+        self.flags = (pg.RESIZABLE | pg.FULLSCREEN)
+        self.screen = pg.display.set_mode(self.size, self.flags)
         self.running = True
         self.game_map = pg.Surface((2000, 2000))
         self.zoom = 1
-        self.camera = Camera(0, 0, self.w, self.h, self.game_map.get_size(), self.zoom)
-        #self.island_map = requests.get(self.url).json()['islands']
+        self.camera = Camera(0, 0, self.w, self.h, self.game_map.get_size())
+        # self.island_map = requests.get(self.url).json()['islands']
         self.island_map = self.read_from_file()
         pg.display.set_caption('Gamethon')
 
     def read_from_file(self):
         with open('island_map.txt', 'r') as file:
-           data = json.load(file)
-           return data['islands']
+            data = json.load(file)
+            return data['islands']
+
     def scale(self, size):
         return size * self.zoom
 
     def set_ships(self, ships):
-        self.my_ships = ships
+        self.ally_ships = ships
 
     def set_enemy_ships(self, ships):
         self.enemy_ships = ships
@@ -60,6 +64,7 @@ class GameMap:
         self.render_enemy_ships()
         self.render_ally_ships()
         self.render_islands()
+        self.render_attack()
         self.camera.output()
         self.screen.blit(
             self.game_map,
@@ -85,16 +90,18 @@ class GameMap:
                         self.running = False
                         pg.quit()
                     if event.key == pg.K_d:
-                        self.camera.update(self.scale(10), 0)
+                        self.camera.update(self.scale(50), 0)
                     if event.key == pg.K_a:
-                        self.camera.update(self.scale(-10), 0)
+                        self.camera.update(self.scale(-50), 0)
                     if event.key == pg.K_w:
-                        self.camera.update(0, self.scale(-10))
+                        self.camera.update(0, self.scale(-50))
                     if event.key == pg.K_s:
-                        self.camera.update(0, self.scale(10))
+                        self.camera.update(0, self.scale(50))
 
                     if event.key == pg.K_MINUS:
                         self.zoom -= 1
+                        if self.zoom <= 0:
+                            self.zoom = 1
                     if event.key == pg.K_EQUALS:
                         self.zoom += 1
             if pg.key.get_pressed()[pg.K_RIGHT]:
@@ -105,23 +112,27 @@ class GameMap:
                 self.camera.update(0, self.scale(-3))
             if pg.key.get_pressed()[pg.K_DOWN]:
                 self.camera.update(0, self.scale(3))
-
-
-
             self.render()
 
-    def render_shots(self, shot_coords):
-        pg.draw.rect(
-            self.screen,
-            blue,
-            (
-                self.scale(shot_coords[0]),
-                self.scale(shot_coords[1]),
-                self.scale(3),
-                self.scale(3)
-            )
-        )
-        pg.display.flip()
+    def render_attack(self):
+        mapa = Map()
+        global_map = mapa.generate_map(self.island_map)
+        bots_list = []
+        for ship in self.ally_ships:
+            bots_list.append(Bot(ship, global_map))
+        for bot in bots_list:
+            attack_coordinates = bot.attack_opponents(self.enemy_ships)
+            if attack_coordinates[0] is not None and attack_coordinates[1] is not None:
+                pg.draw.rect(
+                    self.game_map,
+                    projectile_color,
+                    (
+                        self.scale(attack_coordinates[0]),
+                        self.scale(attack_coordinates[1]),
+                        self.scale(2),
+                        self.scale(2)
+                    )
+                )
 
     def render_islands(self):
         for island in self.island_map:
@@ -141,7 +152,7 @@ class GameMap:
             )
 
     def render_ally_ships(self):
-        for ship in self.my_ships:
+        for ship in self.ally_ships:
             if not self.camera.in_bounds(self.scale(ship['x']), self.scale(ship['y'])):
                 continue
             scan_radius = ship['scanRadius']
@@ -172,8 +183,8 @@ class GameMap:
                 (
                     self.scale(ship['x']),
                     self.scale(ship['y']),
-                    self.scale(1),
-                    self.scale(1)
+                    self.scale(3),
+                    self.scale(3)
                 )
             )
 
@@ -210,7 +221,7 @@ class GameMap:
                 (
                     self.scale(ship['x']),
                     self.scale(ship['y']),
-                    self.scale(1),
-                    self.scale(1)
+                    self.scale(3),
+                    self.scale(3)
                 )
             )

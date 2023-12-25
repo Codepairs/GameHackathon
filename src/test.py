@@ -1,4 +1,6 @@
 from GameMapClass import GameMap
+from BotClass import Bot
+from MapCLass import Map
 
 
 def change_ship_coordinates(ships, x, y):
@@ -318,3 +320,5 @@ change_ship_coordinates(enemy_ships, -1000, -1000)
 visualisation.set_ships(ally_ships)
 visualisation.set_enemy_ships(enemy_ships)
 visualisation.run()
+
+
